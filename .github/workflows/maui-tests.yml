@@ -23,10 +23,16 @@ jobs:
           dotnet workload install maui-windows
 
       - name: Restore dependencies
-        run: dotnet restore --runtime win-x64
+        run: dotnet restore
 
-      - name: Build application
-        run: dotnet build --configuration Release --no-restore -f net8.0-windows10.0.19041.0 -r win-x64
+      - name: Build Core project
+        run: dotnet build ./Grocery.Core/Grocery.Core.csproj --configuration Release --no-restore
+
+      - name: Build Core Data project
+        run: dotnet build ./Grocery.Core.Data/Grocery.Core.Data.csproj --configuration Release --no-restore
+
+      - name: Build App project
+        run: dotnet build ./Grocery.App/Grocery.App.csproj --configuration Release --no-restore -f net8.0-windows10.0.19041.0 -r win-x64
 
       - name: Run unit tests
-        run: dotnet test --configuration Release --no-restore --no-build --verbosity normal
+        run: dotnet test --configuration Release --no-build --verbosity normal
