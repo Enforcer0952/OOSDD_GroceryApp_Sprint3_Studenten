@@ -24,10 +24,10 @@ namespace Grocery.App.ViewModels
         GroceryList groceryList = new(0, "None", DateOnly.MinValue, "", 0);
 
         [ObservableProperty]
-        string myMessage;
+        string myMessage = string.Empty;
 
         [ObservableProperty]
-        string searchInput;
+        string searchInput = string.Empty;
 
         public GroceryListItemsViewModel(IGroceryListItemsService groceryListItemsService, IProductService productService, IFileSaverService fileSaverService)
         {
@@ -65,13 +65,12 @@ namespace Grocery.App.ViewModels
         private void FilterAvailableProducts()
         {
             FilteredAvailableProducts.Clear();
-            var filtered = string.IsNullOrWhiteSpace(searchInput)
+            var filtered = string.IsNullOrWhiteSpace(SearchInput)
                 ? AvailableProducts
-                : AvailableProducts.Where(p => p.Name.Contains(searchInput, StringComparison.OrdinalIgnoreCase));
+                : AvailableProducts.Where(p => p.Name.Contains(SearchInput, StringComparison.OrdinalIgnoreCase));
             foreach (var product in filtered)
             { FilteredAvailableProducts.Add(product); }
-            FilterAvailableProducts();
-        }
+           }
 
         [RelayCommand]
         public async Task ChangeColor()
@@ -89,6 +88,7 @@ namespace Grocery.App.ViewModels
             _productService.Update(product);
             AvailableProducts.Remove(product);
             OnGroceryListChanged(GroceryList);
+            SearchInput = string.Empty;
         }
 
         [RelayCommand]

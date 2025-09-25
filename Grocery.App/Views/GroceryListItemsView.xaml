@@ -55,7 +55,7 @@
             <StackLayout>
                 <SearchBar
                     Placeholder="Zoek product..."
-                    Text="{Binding ProductSearchText, Mode=TwoWay}"
+                    Text="{Binding SearchInput, Mode=TwoWay}"
                     Margin="5"
                     WidthRequest="300"
                     HorizontalOptions="Start" />
