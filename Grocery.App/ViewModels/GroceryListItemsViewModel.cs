@@ -70,7 +70,7 @@ namespace Grocery.App.ViewModels
                 : AvailableProducts.Where(p => p.Name.Contains(SearchInput, StringComparison.OrdinalIgnoreCase));
             foreach (var product in filtered)
             { FilteredAvailableProducts.Add(product); }
-           }
+        }
 
         [RelayCommand]
         public async Task ChangeColor()
