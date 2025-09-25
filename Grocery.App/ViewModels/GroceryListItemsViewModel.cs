@@ -15,14 +15,19 @@ namespace Grocery.App.ViewModels
         private readonly IGroceryListItemsService _groceryListItemsService;
         private readonly IProductService _productService;
         private readonly IFileSaverService _fileSaverService;
-        
+
         public ObservableCollection<GroceryListItem> MyGroceryListItems { get; set; } = [];
         public ObservableCollection<Product> AvailableProducts { get; set; } = [];
+        public ObservableCollection<Product> FilteredAvailableProducts { get; } = [];
 
         [ObservableProperty]
         GroceryList groceryList = new(0, "None", DateOnly.MinValue, "", 0);
+
         [ObservableProperty]
         string myMessage;
+
+        [ObservableProperty]
+        string searchInput;
 
         public GroceryListItemsViewModel(IGroceryListItemsService groceryListItemsService, IProductService productService, IFileSaverService fileSaverService)
         {
@@ -43,13 +48,29 @@ namespace Grocery.App.ViewModels
         {
             AvailableProducts.Clear();
             foreach (Product p in _productService.GetAll())
-                if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == p.Id) == null  && p.Stock > 0)
+                if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == p.Id) == null && p.Stock > 0)
                     AvailableProducts.Add(p);
         }
 
         partial void OnGroceryListChanged(GroceryList value)
         {
             Load(value.Id);
+        }
+
+        partial void OnSearchInputChanged(string value)
+        {
+            FilterAvailableProducts();
+        }
+
+        private void FilterAvailableProducts()
+        {
+            FilteredAvailableProducts.Clear();
+            var filtered = string.IsNullOrWhiteSpace(searchInput)
+                ? AvailableProducts
+                : AvailableProducts.Where(p => p.Name.Contains(searchInput, StringComparison.OrdinalIgnoreCase));
+            foreach (var product in filtered)
+            { FilteredAvailableProducts.Add(product); }
+            FilterAvailableProducts();
         }
 
         [RelayCommand]
