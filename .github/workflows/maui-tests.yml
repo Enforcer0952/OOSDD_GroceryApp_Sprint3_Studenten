@@ -21,9 +21,13 @@ jobs:
           dotnet workload install maui
           dotnet workload install maui-windows
 
-      # Restore dependencies
+      # General restore
       - name: Restore dependencies
         run: dotnet restore
+
+      # Specific restore for MAUI Windows project
+      - name: Restore MAUI Windows dependencies
+        run: dotnet restore ./Grocery.App/Grocery.App.csproj -f net8.0-windows10.0.19041.0
 
       # Build the library projects first
       - name: Build Core projects
