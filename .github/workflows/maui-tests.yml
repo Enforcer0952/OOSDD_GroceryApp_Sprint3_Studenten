@@ -10,28 +10,25 @@ on:
     branches:
       - main
       - Develop
-      - Feature/*
-      
+      - Feature/*     
+
 jobs:
   test:
-    runs-on: ubuntu-latest  # Of windows-latest/macOS-latest als specifiek platform nodig is
+    runs-on: windows-latest
     steps:
-      - name: Haal de repository op
-        uses: actions/checkout@v4
-
-      - name: Installeer .NET SDK
-        uses: actions/setup-dotnet@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'  # Gebruik de juiste versie voor MAUI
-
-      - name: Installeer MAUI workloads
+          dotnet-version: '8.0.x'
+      - name: Install MAUI workloads
         run: dotnet workload install maui
-
-      - name: Herstel afhankelijkheden
+      - name: Restore dependencies
         run: dotnet restore
-
-      - name: Bouw de applicatie
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Voer unit tests uit
-        run: dotnet test --configuration Release --no-restore --no-build --verbosity normal
+      - name: Build Core projects
+        run: |
+          dotnet build ./Grocery.Core/Grocery.Core.csproj --configuration Release --no-restore
+          dotnet build ./Grocery.Core.Data/Grocery.Core.Data.csproj --configuration Release --no-restore
+      - name: Build MAUI App (Windows only)
+        run: dotnet build ./Grocery.App/Grocery.App.csproj --configuration Release --no-restore -f net8.0-windows10.0.19041.0
+      - name: Run unit tests
+        run: dotnet test --configuration Release --no-build --verbosity normal
