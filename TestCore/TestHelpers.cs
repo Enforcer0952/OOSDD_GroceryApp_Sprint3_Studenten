@@ -33,11 +33,11 @@ namespace TestCore
         {
             string password = "BadPassword";
             string passwordHash = "sxnIcZdYt8wC8MYWcQVQjQ==.FKd5Z/jwxPv3a63lX+uvQ0+P7EuNYZybvkmdhbnkIHA=";
-            Assert.IsFalse(PasswordHelper.VerifyPassword(password, passwordHash)); //Zelf uitwerken
+            Assert.IsFalse(PasswordHelper.VerifyPassword(password, passwordHash));
         }
 
         [TestCase("BadPassword", "IunRhDKa+fWo8+4/Qfj7Pg==.kDxZnUQHCZun6gLIE6d9oeULLRIuRmxmH2QKJv2IM08=")]
-        [TestCase("WorsePassword", "sxnIcZdYt8wC8MYWcQVQjQ==.FKd5Z/jwxPv3a63lX+uvQ0+P7EuNYZybvkmdhbnkIHA=")]
+        [TestCase("WorsePassWord", "sxnIcZdYt8wC8MYWcQVQjQ==.FKd5Z/jwxPv3a63lX+uvQ0+P7EuNYZybvkmdhbnkIHA=")]
         public void TestPasswordHelperReturnsFalse(string password, string passwordHash)
         {
             Assert.IsFalse(PasswordHelper.VerifyPassword(password, passwordHash));
