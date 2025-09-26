@@ -31,7 +31,7 @@ namespace Grocery.Core.Services
             {
                 throw new ArgumentException("E-mail bestaat al");
             }
-
+            
             string hashedPassword = PasswordHelper.HashPassword(password);
             int id = _clientService.GetAll().Max(c => c.Id);
             Client newClient = new(id + 1, name, email, hashedPassword);

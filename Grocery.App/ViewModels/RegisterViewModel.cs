@@ -1,9 +1,8 @@
-
+﻿
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Grocery.App.Views;
 using Grocery.Core.Interfaces.Services;
-using System.Xml.Linq;
+using Grocery.App.Views;
 
 
 namespace Grocery.App.ViewModels
@@ -39,7 +38,7 @@ namespace Grocery.App.ViewModels
                 RegistrationMessage = ex.Message;
             }
         }
-
+        
         [RelayCommand]
         private void GoToLogin()
         {

@@ -4,9 +4,9 @@ namespace Grocery.App.Views;
 
 public partial class RegisterView : ContentPage
 {
-    public RegisterView(RegistrationViewModel viewModel)
-    {
-        InitializeComponent();
-        BindingContext = viewModel;
-    }
+	public RegisterView(RegistrationViewModel viewModel)
+	{
+		InitializeComponent();
+		BindingContext = viewModel;
+	}
 }
