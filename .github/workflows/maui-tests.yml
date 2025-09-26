@@ -25,6 +25,10 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
+      # Windows-specific restore with the same target framework parameter
+      - name: Restore Windows dependencies
+        run: dotnet restore ./Grocery.App/Grocery.App.csproj /p:TargetFramework=net8.0-windows10.0.19041.0
+
       # Build the library projects first
       - name: Build Core projects
         run: |
