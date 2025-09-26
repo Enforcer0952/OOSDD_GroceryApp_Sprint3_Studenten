@@ -2,35 +2,39 @@ name: MAUI Unit Tests
 
 on:
   push:
-    branches:
-      - main
-      - Develop
-      - Feature/*
+    branches: [ main, Develop, Feature/* ]
   pull_request:
-    branches:
-      - main
-      - Develop
-      - Feature/*     
+    branches: [ main, Develop, Feature/* ]
 
 jobs:
   test:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
+
       - name: Install MAUI workloads
-        run: dotnet workload install maui
-      - name: Restore solution dependencies
+        run: |
+          dotnet workload install maui
+          dotnet workload install maui-windows
+
+      # Restore dependencies
+      - name: Restore dependencies
         run: dotnet restore
+
+      # Build the library projects first
       - name: Build Core projects
         run: |
           dotnet build ./Grocery.Core/Grocery.Core.csproj --configuration Release --no-restore
           dotnet build ./Grocery.Core.Data/Grocery.Core.Data.csproj --configuration Release --no-restore
-      - name: Restore MAUI App dependencies (with explicit framework and runtime)
-        run: dotnet restore ./Grocery.App/Grocery.App.csproj -f net8.0-windows10.0.19041.0 --runtime win-x64
+
+      # Build only the Windows version of the MAUI app
       - name: Build MAUI App (Windows only)
-        run: dotnet build ./Grocery.App/Grocery.App.csproj --configuration Release -f net8.0-windows10.0.19041.0
+        run: dotnet build ./Grocery.App/Grocery.App.csproj --configuration Release --no-restore -f net8.0-windows10.0.19041.0
+
+      # Run tests
       - name: Run unit tests
         run: dotnet test --configuration Release --no-build --verbosity normal
