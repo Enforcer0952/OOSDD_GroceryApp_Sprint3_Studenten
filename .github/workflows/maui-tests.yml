@@ -17,18 +17,27 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x'
-      - name: Install MAUI workloads
-        run: dotnet workload install maui
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: Build Core projects
-        run: |
-          dotnet build ./Grocery.Core/Grocery.Core.csproj --configuration Release --no-restore
-          dotnet build ./Grocery.Core.Data/Grocery.Core.Data.csproj --configuration Release --no-restore
-      - name: Build MAUI App (Windows only)
-        run: dotnet build ./Grocery.App/Grocery.App.csproj --configuration Release --no-restore -f net8.0-windows10.0.19041.0
-      - name: Run unit tests
-        run: dotnet test --configuration Release --no-build --verbosity normal
+
+- uses: actions/setup-dotnet@v3
+  with:
+    dotnet-version: '8.0.x'
+
+- name: Install MAUI workloads
+  run: dotnet workload install maui
+
+- name: Restore dependencies
+  run: dotnet restore
+
+- name: Build Core projects
+  run: |
+    dotnet build ./Grocery.Core/Grocery.Core.csproj --configuration Release --no-restore
+    dotnet build ./Grocery.Core.Data/Grocery.Core.Data.csproj --configuration Release --no-restore
+
+- name: Restore MAUI App dependencies (with runtime identifier)
+  run: dotnet restore ./Grocery.App/Grocery.App.csproj --runtime win-x64
+
+- name: Build MAUI App (Windows only)
+  run: dotnet build ./Grocery.App/Grocery.App.csproj --configuration Release --no-restore -f net8.0-windows10.0.19041.0
+
+- name: Run unit tests
+  run: dotnet test --configuration Release --no-build --verbosity normal
