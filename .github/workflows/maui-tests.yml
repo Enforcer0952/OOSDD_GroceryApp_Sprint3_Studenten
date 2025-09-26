@@ -25,19 +25,15 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      # Specific restore for MAUI Windows project
-      - name: Restore MAUI Windows dependencies
-        run: dotnet restore ./Grocery.App/Grocery.App.csproj --framework net8.0-windows10.0.19041.0
-
       # Build the library projects first
       - name: Build Core projects
         run: |
           dotnet build ./Grocery.Core/Grocery.Core.csproj --configuration Release --no-restore
           dotnet build ./Grocery.Core.Data/Grocery.Core.Data.csproj --configuration Release --no-restore
 
-      # Build only the Windows version of the MAUI app
+      # Build only the Windows version of the MAUI app using the proper MSBuild property format
       - name: Build MAUI App (Windows only)
-        run: dotnet build ./Grocery.App/Grocery.App.csproj --configuration Release --no-restore --framework net8.0-windows10.0.19041.0
+        run: dotnet build ./Grocery.App/Grocery.App.csproj --configuration Release --no-restore /p:TargetFramework=net8.0-windows10.0.19041.0
 
       # Run tests
       - name: Run unit tests
