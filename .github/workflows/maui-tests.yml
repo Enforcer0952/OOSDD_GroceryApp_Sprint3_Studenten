@@ -4,12 +4,13 @@ on:
   push:
     branches:
       - main
-      - development
-      - feature/uc09-registratie-gebruiker
+      - Develop
+      - Feature/*
   pull_request:
     branches:
       - main
-      - development
+      - Develop
+      - Feature/*
 
 jobs:
   test:
